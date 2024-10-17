@@ -1,18 +1,33 @@
 # SW_ObjectTracker
-> Skunk Works Object Tracker OT
+> Skunk Works Object Tracker - OT
 
-[![python](https://img.shields.io/badge/Python-3.9-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
+
+![Static Badge](https://img.shields.io/badge/Python-black?style=for-the-badge&logo=python&logoColor=%23%233776AB&labelColor=black&color=%233776AB)
+![Static Badge](https://img.shields.io/badge/Jetson-black?style=for-the-badge&logo=nvidia&logoColor=%2376B900&labelColor=black&color=76B900)
+![Static Badge](https://img.shields.io/badge/pytorch-%23EE4C2C?style=for-the-badge&logo=pytorch&logoColor=%23EE4C2C&labelColor=black&color=%23EE4C2C)
+![Static Badge](https://img.shields.io/badge/opencv-%235C3EE8?style=for-the-badge&logo=opencv&logoColor=%235C3EE8&labelColor=black&color=%235C3EE8)
 
 This OT application:
 * runs on the NVidia Jetson Orin utilizing the camera to detect people
-* assigns them a unique ID
+* assigns each person a unique ID
 * sends that ID with X Y coordinates to AOS app
 
 ![](nano.jpg)
 
 ## Development setup
 
-The NVidia Jetson Orin development environment is setup to utilize prebuilt docker containers
+The NVidia Jetson Orin development environment is setup to utilize prebuilt docker containers.
+Jetson Inference is required to run these prebuilt containers.
+
+Install with these instructions at this link:
+
+[Running the Docker Container: Launching the Container](https://github.com/dusty-nv/jetson-inference/blob/master/docs/aux-docker.md)
+
+```sh
+$ git clone --recursive --depth=1 https://github.com/dusty-nv/jetson-inference
+$ cd jetson-inference
+$ docker/run.sh
+```
 
 **NOTE:**  you can alternatively build these projects from source
 
@@ -31,18 +46,22 @@ This application takes advantage of these containers as noted below in the Usage
 
 ## Usage example
 
-Execute the following commands to get the Object Tracking application running. This requires 2 terminals:
+Execute the following commands to get the Object Tracking application running. This requires 2 terminals.
+
+Terminal 1 to run the UDP server:
 
 ```sh
-cd ~/skunkworks
-g++ udp_server.cpp -o udp_server
-./udp_server
+$ cd ~/skunkworks
+$ g++ udp_server.cpp -o udp_server
+$ ./udp_server
 ```
 
+Terminal 2 to run the Jetson application:
+
 ```sh
-cd ~/Documents/jetson-inference
-docker/run.sh -v ~/.bash_aliases:/root/.bash_aliases --volume ~/skunkworks/:/my-object-tracking
-python3 /my-object-tracking/object_tracking.py
+$ cd ~/Documents/jetson-inference
+$ docker/run.sh -v ~/.bash_aliases:/root/.bash_aliases -v ~/skunkworks/:/my-object-tracking
+$ python3 /my-object-tracking/object_tracking.py
 ```
 
 
