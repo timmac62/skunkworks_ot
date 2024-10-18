@@ -57,7 +57,10 @@ parser.add_argument("--network", type=str, default="ssd-mobilenet-v2", help="pre
 parser.add_argument("--camera", type=str, default="/dev/video0", help="camera device to use (e.g., /dev/video0 for USB webcam)")
 parser.add_argument("--width", type=int, default=640, help="width of camera stream")
 parser.add_argument("--height", type=int, default=480, help="height of camera stream")
+parser.add_argument("-hc", "--hide_camera", action="store_true", default=False, help="do not display camera stream")
 args = parser.parse_args()
+
+hide_camera = args.hide_camera
 
 # Load the object detection network
 net = jetson_inference.detectNet(args.network, threshold=0.5)
@@ -80,11 +83,12 @@ while display.IsStreaming():
     # Update tracker with the current frame's detections
     tracker.update(detections)
 
-    # Render the image
-    display.Render(img)
+    if not hide_camera:
+        # Render the image
+        display.Render(img)
 
-    # Update the display
-    display.SetStatus(f"Object Detection & Tracking | Network {args.network} | {net.GetNetworkFPS():.0f} FPS")
+        # Update the display
+        display.SetStatus(f"Object Detection & Tracking | Network {args.network} | {net.GetNetworkFPS():.0f} FPS")
 
 # Release resources
 camera.Close()
