@@ -29,11 +29,15 @@ $ cd jetson-inference
 $ docker/run.sh
 ```
 
-**NOTE:**  you can alternatively build these projects from source
+**NOTE:**  It takes a VERY long time to run the initial applications due to downloading libraries and content. Therefore, run a few of the examples to cache some of these elements and make future runs quicker:
 
-These containers include l4tpytorch and many other useful libraries and tools
-
-This application takes advantage of these containers as noted below in the Usage example
+```sh
+$ cd ~/Documents/jetson-inference
+$ docker/run.sh -v
+$ cd build/aarch64/bin
+$ ./video-viewer /dev/video0
+$ ./imagenet images/jellyfish.jpg images/test/jellyfish.jpg
+```
 
 ## File Descriptions
 
@@ -45,6 +49,19 @@ This application takes advantage of these containers as noted below in the Usage
 
 
 ## Usage example
+
+Command Line Options can be viewed by running:
+
+```sh
+$ cd ~/Documents/jetson-inference
+$ docker/run.sh -v ~/skunkworks/:/my-object-tracking
+$ python3 /my-object-tracking/object_tracking.py --help
+```
+
+You can hide the camera stream by passing the argument -hc (by default the camera stream will be displayed)
+```sh
+$ python3 /my-object-tracking/object_tracking.py -hc
+```
 
 Execute the following commands to get the Object Tracking application running. This requires 2 terminals.
 
@@ -60,7 +77,7 @@ Terminal 2 to run the Jetson application:
 
 ```sh
 $ cd ~/Documents/jetson-inference
-$ docker/run.sh -v ~/.bash_aliases:/root/.bash_aliases -v ~/skunkworks/:/my-object-tracking
+$ docker/run.sh -v ~/skunkworks/:/my-object-tracking
 $ python3 /my-object-tracking/object_tracking.py
 ```
 
